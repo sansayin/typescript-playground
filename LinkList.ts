@@ -19,16 +19,15 @@ class LinkList<T> {
   public get Size(): Number {
     return this.size;
   }
-  static appendList<T>(a: LinkList<T>, b: LinkList<T>) {
-    let p = b.head;
+  public appendList<T>(a: LinkList<T>) {
+    let p: any = a.head;
     while (p) {
-      a.addTail(p.Value!);
+      this.addTail(p.Value);
       p = p.Next;
     }
-    return a;
   }
 
-  static appendNode<T>(a: LinkList<T>, value: T): LinkList<T> | null {
+  public appendNode<T>(a: LinkList<T>, value: T): LinkList<T> | null {
     a.addTail(value);
     return a;
   }
@@ -150,21 +149,41 @@ class LinkList<T> {
     return array;
   }
 
-  //  static sort<T>(list: NNodeCList<T>): NNodeCList<T>[] {
-  //    let pivot = list.chopHead()
-  //    console.log("POP Head:", pivot.Value)
-  //    let [left, right] = list.filter(pivot.Value, list)
-  //    //process.exit()
-  //    return NNodeCList.sort(NNodeCList.appendList(NNodeCList.appendNode(left, pivot), right))
-  //  }
-  public print() {
+  static sort<T>(list: LinkList<T>): LinkList<T> {
+    if (!list.head || !list.head.Next) {
+      return list;
+    }
+    const pivot = list.head;
+    let leftList: LinkList<T> = new LinkList();
+    let rightList: LinkList<T> = new LinkList();
+    let currentNode = list.head.Next;
+    pivot.Next = null!;
+
+    while (currentNode) {
+      if (currentNode.Value < pivot.Value) {
+        leftList.addTail(currentNode.Value);
+      } else {
+        rightList.addTail(currentNode.Value);
+      }
+      currentNode = currentNode.Next;
+    }
+
+    leftList = LinkList.sort(leftList);
+    rightList = LinkList.sort(rightList);
+
+    leftList.addTail(pivot.Value);
+    leftList.appendList(rightList);
+    return leftList;
+  }
+
+  public print(msg?: any) {
     let p = this.head;
-    let msg: string = "List Items >>  :";
+    let output: string = msg;
     while (p) {
-      msg = msg + p.Value + " ";
+      output = output + p.Value + " ";
       p = p.Next;
     }
-    console.log(msg);
+    console.log(output);
   }
 }
 

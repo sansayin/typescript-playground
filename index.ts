@@ -124,7 +124,7 @@ console.log(stack.getArray());
 let pop = stack.pop();
 console.log(stack.getArray());
 console.log("Find Node 3:", stack.search(3));
-LinkList.appendList(stack, list3);
+stack.appendList(list3);
 console.log("New List:");
 console.log(stack.getArray());
 console.log("Find Node 3:", stack.search(3));
@@ -132,13 +132,10 @@ console.log("Find Node 3:", stack.search(3));
 let ARR = stack.getArray();
 console.log(ARR);
 
-let q_sort = new LinkList(9, 6, 10, 5);
+let q_sort = new LinkList(9, 6, 10, 5, 7);
 console.log(q_sort.getArray());
-let q = q_sort.remove(6);
-console.log("Removed:", q.Value);
-//q_sort.addTail(new NNodeC(8))
-console.log(q_sort.getArray());
-//NNodeCList.sort(q_sort)
+let sorted = LinkList.sort(q_sort);
+console.log(sorted.getArray());
 
 async function Wait(ms: number) {
   await Sleep(ms);
