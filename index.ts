@@ -12,10 +12,12 @@ str_array.forEach(element => {
     console.log(typeof element)
 });
 
+console.log("Mix arrays using any")
 let mixed: any[] = [
     ...int_array,
     ...str_array
 ]
+console.log(mixed)
 if (typeof int_array[0] == typeof str_array[0]) {
     console.log("Type Match!")
 } else {
@@ -67,7 +69,7 @@ function quickSortF(arr: any[]): any[] {
     return quickSortF(left).concat(head, quickSortF(right))
 
 }
-
+console.log("TS QuickSort")
 const q7 = quickSortF([11, 8, 14, 3, 6, 2, 7])
 console.log(q7)
 
@@ -116,7 +118,7 @@ console.log(list3.getArray())
 list3.addTail(7)
 console.log("Add 7:")
 console.log(list3.getArray())
-list3.addTail(null)
+list3.addTail(null!)
 console.log("Add null:")
 console.log(list3.getArray())
 list3.chopHead();
@@ -151,3 +153,6 @@ empty_stack.chopHead();
 empty_stack.chopTail();
 empty_stack.search(3);
 console.log(empty_stack.getArray())
+
+let items= [1, 2, 3, null];
+console.log(typeof items)
