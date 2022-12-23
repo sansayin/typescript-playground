@@ -3,7 +3,7 @@ import { Node } from "./Node";
 class LinkList<T> {
   private head: Node<T> | null = null;
   private tail: Node<T> | null = null;
-  private size: number = 0;
+  private size = 0;
   constructor(value?: T, ...arr: T[]) {
     if (!value) return;
     this.head = new Node(value);
@@ -16,25 +16,24 @@ class LinkList<T> {
     });
     this.tail = p;
   }
-  public get Size(): Number {
+  public get Size(): number {
     return this.size;
   }
-  public appendList<T>(a: LinkList<T>) {
-    let p: any = a.head;
+  public appendList(a: LinkList<T>) {
+    let p = a.head;
     while (p) {
       this.addTail(p.Value);
       p = p.Next;
     }
   }
 
-  public appendNode<T>(a: LinkList<T>, value: T): LinkList<T> | null {
+  public appendNode(a: LinkList<T>, value: T): LinkList<T> {
     a.addTail(value);
     return a;
   }
 
   public addTail(value: T): Node<T> {
-    if (!value) return null!;
-    let node = new Node(value);
+    const node = new Node(value);
     if (this.size == 0) {
       this.head = this.tail = node;
     } else {
@@ -48,7 +47,7 @@ class LinkList<T> {
   }
 
   public addHead(value: T): Node<T> {
-    let p = new Node(value);
+    const p = new Node(value);
     p.Next = this.head!;
     this.head = p;
     this.size++;
@@ -57,29 +56,29 @@ class LinkList<T> {
 
   public chopHead(): Node<T> | null {
     if (this.size == 0) return null;
-    let p = this.head;
+    const p = this.head;
     this.head = this.head!.Next;
     this.size--;
     return p;
   }
 
-  public chopTail(): T {
-    if (this.size == 0) return null!;
+  public chopTail(): T | null {
+    if (this.size == 0) return null;
     if (this.size == 1) {
-      let ret = this.head?.Value;
+      const ret = this.head?.Value;
       this.size--;
       this.head = this.tail = null;
-      return ret!;
+      return ret;
     }
-    let f: any = this.head;
-    let s: any = null;
+    let f = this.head;
+    let s = null;
     while (f && f != this.tail) {
       s = f;
       f = f.Next;
     }
     this.size--;
     this.tail = s;
-    s.Next = null;
+    s ? (s.Next = null) : {};
     return f.Value;
   }
 
@@ -87,7 +86,7 @@ class LinkList<T> {
     this.addTail(value);
   }
 
-  public pop(): T {
+  public pop(): T | null {
     return this.chopTail();
   }
 
@@ -103,16 +102,16 @@ class LinkList<T> {
   }
 
   public remove(value: T): Node<T> {
-    let fast: any = this.head;
-    let slow: any = null;
+    let fast = this.head;
+    let slow;
     while (fast && fast.Value != value) {
       slow = fast;
       fast = fast.Next;
     }
-    let ret = fast;
-    slow.Next = fast?.Next;
-    ret.Next = null;
-    return ret;
+    const ret = fast;
+    slow.Next = fast.Next;
+    ret.Next = undefined;
+    return ret!;
   }
 
   //public filter(pivot: T, list: NNodeCList<T>): NNodeCList<T>[] {
@@ -140,7 +139,7 @@ class LinkList<T> {
   //}
   //
   public getArray(): T[] {
-    let array: T[] = [];
+    const array: T[] = [];
     let p = this.head;
     while (p) {
       array.push(p.Value);
@@ -153,11 +152,11 @@ class LinkList<T> {
     if (!list.head || !list.head.Next) {
       return list;
     }
-    const pivot = list.head;
+    const pivot = list.head!;
     let leftList: LinkList<T> = new LinkList();
     let rightList: LinkList<T> = new LinkList();
-    let currentNode = list.head.Next;
-    pivot.Next = null!;
+    let currentNode = pivot.Next;
+    //pivot.Next = null!;
 
     while (currentNode) {
       if (currentNode.Value < pivot.Value) {
@@ -168,16 +167,17 @@ class LinkList<T> {
       currentNode = currentNode.Next;
     }
 
-    leftList = LinkList.sort(leftList);
-    rightList = LinkList.sort(rightList);
+    leftList = this.sort(leftList);
+    rightList = this.sort(rightList);
 
     leftList.addTail(pivot.Value);
     leftList.appendList(rightList);
     return leftList;
   }
 
-  public print(msg?: any) {
+  public print(msg: string) {
     let p = this.head;
+    msg = msg + " :";
     let output: string = msg;
     while (p) {
       output = output + p.Value + " ";
