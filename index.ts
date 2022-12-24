@@ -124,7 +124,7 @@ stack.appendList(list3);
 console.log("New List:");
 console.log(stack.getArray());
 console.log("Find Node 3:", stack.search(3));
-
+let e =4;
 const ARR = stack.getArray();
 console.log(ARR);
 const q_sort = new LinkList(9, 6, 10, 5, 7);
@@ -149,13 +149,18 @@ Wait(1000).then(() => {
   console.log("Type: ", typeof items);
 });
 
-let empty_link = new LinkList()
-empty_link.chopTail()
-empty_link.addTail(1)
+const empty_link = new LinkList()
+empty_link.print("Empty_Link")
+const e_ret = empty_link.chopTail()
+console.log(e_ret)
+const e_ret1 =empty_link.addTail(1)
+console.log(e_ret1);
+empty_link.print("Before Remove:")
+console.log(empty_link.remove(1))
+empty_link.print("After Remove:")
 empty_link.pop()
 empty_link.print("After POP::")
 empty_link.chopHead()
 empty_link.print("should be empty ")
 empty_link.appendList(q_sort)
 empty_link.print("shoule be big ")
-

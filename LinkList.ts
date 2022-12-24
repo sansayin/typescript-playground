@@ -10,9 +10,9 @@ class LinkList<T> {
     this.size++;
     let p: Node<T> = this.head;
     arr.forEach((element) => {
-      p.Next = new Node(element);
+      p.next = new Node(element);
       this.size++;
-      p = p.Next;
+      p = p.next;
     });
     this.tail = p;
   }
@@ -22,8 +22,8 @@ class LinkList<T> {
   public appendList(a: LinkList<T>) {
     let p = a.head;
     while (p) {
-      this.addTail(p.Value);
-      p = p.Next;
+      this.addTail(p.value);
+      p = p.next;
     }
   }
 
@@ -38,7 +38,7 @@ class LinkList<T> {
       this.head = this.tail = node;
     } else {
       if (this.tail) {
-        this.tail.Next = node;
+        this.tail.next = node;
         this.tail = node;
       }
     }
@@ -48,7 +48,7 @@ class LinkList<T> {
 
   public addHead(value: T): Node<T> {
     const p = new Node(value);
-    p.Next = this.head!;
+    p.next = this.head;
     this.head = p;
     this.size++;
     return p;
@@ -57,15 +57,16 @@ class LinkList<T> {
   public chopHead(): Node<T> | null {
     if (this.size == 0) return null;
     const p = this.head;
-    this.head = this.head!.Next;
+    if(this.head) this.head = this.head.next;
     this.size--;
     return p;
   }
 
-  public chopTail(): T | null {
+  public chopTail(): T |null {
     if (this.size == 0) return null;
     if (this.size == 1) {
-      const ret = this.head?.Value;
+      let ret = null;
+      this.head?ret = this.head.value:{};
       this.size--;
       this.head = this.tail = null;
       return ret;
@@ -74,12 +75,12 @@ class LinkList<T> {
     let s = null;
     while (f && f != this.tail) {
       s = f;
-      f = f.Next;
+      f = f.next;
     }
     this.size--;
     this.tail = s;
-    s ? (s.Next = null) : {};
-    return f.Value;
+    s ? (s.next = null) : {};
+    return f&&f.value;
   }
 
   public push(value: T) {
@@ -93,25 +94,26 @@ class LinkList<T> {
   public search(value: T): boolean {
     let p = this.head;
     while (p != null) {
-      if (p.Value == value) {
+      if (p.value == value) {
         return true;
       }
-      p = p.Next;
+      p = p.next;
     }
     return false;
   }
 
-  public remove(value: T): Node<T> {
+  public remove(value: T): Node<T> | null {
     let fast = this.head;
-    let slow;
-    while (fast && fast.Value != value) {
+    let slow = null;
+    while (fast && fast.value != value) {
       slow = fast;
-      fast = fast.Next;
+      fast = fast.next;
     }
-    const ret = fast;
-    slow.Next = fast.Next;
-    ret.Next = undefined;
-    return ret!;
+    if (fast && slow) {
+      slow.next = fast.next;
+      fast.next = null;
+    }
+    return fast;
   }
 
   //public filter(pivot: T, list: NNodeCList<T>): NNodeCList<T>[] {
@@ -119,17 +121,17 @@ class LinkList<T> {
   //  let right = new NNodeCList<T>();
   //  let p = list.head;
   //  list.print()
-  //  while (p?.Next) {
-  //    console.log("VALUE:", p.Value, " PIVOT:", pivot)
-  //    if (p.Value > pivot) {
-  //      left.addTail(p.Value)
-  //      console.log("LEFT ADD:", p.Value)
+  //  while (p?.next) {
+  //    console.log("VALUE:", p.value, " PIVOT:", pivot)
+  //    if (p.value > pivot) {
+  //      left.addTail(p.value)
+  //      console.log("LEFT ADD:", p.value)
   //    }
   //    else {
-  //      right.addTail(p.Value)
-  //      console.log("RIGH ADD:", p.Value)
+  //      right.addTail(p.value)
+  //      console.log("RIGH ADD:", p.value)
   //    }
-  //    p = p.Next
+  //    p = p.next
   //  }
   //  console.log("LEFT:")
   //  left.print()
@@ -142,35 +144,35 @@ class LinkList<T> {
     const array: T[] = [];
     let p = this.head;
     while (p) {
-      array.push(p.Value);
-      p = p.Next;
+      array.push(p.value);
+      p = p.next;
     }
     return array;
   }
 
   static sort<T>(list: LinkList<T>): LinkList<T> {
-    if (!list.head || !list.head.Next) {
+    if (!list.head || !list.head.next) {
       return list;
     }
-    const pivot = list.head!;
+    const pivot = list.head;
     let leftList: LinkList<T> = new LinkList();
     let rightList: LinkList<T> = new LinkList();
-    let currentNode = pivot.Next;
-    //pivot.Next = null!;
+    let currentNode = pivot.next;
+    //pivot.next = null!;
 
     while (currentNode) {
-      if (currentNode.Value < pivot.Value) {
-        leftList.addTail(currentNode.Value);
+      if (currentNode.value < pivot.value) {
+        leftList.addTail(currentNode.value);
       } else {
-        rightList.addTail(currentNode.Value);
+        rightList.addTail(currentNode.value);
       }
-      currentNode = currentNode.Next;
+      currentNode = currentNode.next;
     }
 
     leftList = this.sort(leftList);
     rightList = this.sort(rightList);
 
-    leftList.addTail(pivot.Value);
+    leftList.addTail(pivot.value);
     leftList.appendList(rightList);
     return leftList;
   }
@@ -180,8 +182,8 @@ class LinkList<T> {
     msg = msg + " :";
     let output: string = msg;
     while (p) {
-      output = output + p.Value + " ";
-      p = p.Next;
+      output = output + p.value + " ";
+      p = p.next;
     }
     console.log(output);
   }
